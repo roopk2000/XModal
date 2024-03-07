@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState ,useEffect, useRef} from 'react';
 import './App.css'; // Import your modal CSS file
 
 const Modal = () => {
@@ -10,22 +10,7 @@ const Modal = () => {
     dob: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
-
   const modalRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        closeModal();
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const openModal = () => {
     setIsOpen(true);
@@ -79,15 +64,30 @@ const Modal = () => {
     setFormData({ ...formData, [id]: value });
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (modalRef.current && !modalRef.current.contains(event.target)) {
+        closeModal();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
   return (
     <div>
-<div className='center'>
+      <div className='center'>
       <h2 >User Details Form</h2>
       </div>
       <div className='center'>
       <button className="blue-button" onClick={openModal}>Open Form</button>
       </div>
-            {isOpen && (
+      {isOpen && (
         <div className="modal">
           <div ref={modalRef} className="modal-content">
             <span className="close" onClick={closeModal}>&times;</span>
