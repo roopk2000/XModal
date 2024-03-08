@@ -7,6 +7,7 @@ const ModalApp = () => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [dob, setDob] = useState("");
+  const [error, setError] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -14,25 +15,47 @@ const ModalApp = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    // Clear form fields and error message when modal closes
+    setUsername("");
+    setEmail("");
+    setPhone("");
+    setDob("");
+    setError("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add form submission logic here
-    // For demonstration purposes, alert is used
+    // Validate email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Invalid email");
+      return;
+    }
+    // Validate phone number
+    if (!/^\d{10}$/.test(phone)) {
+      setError("Invalid phone number");
+      return;
+    }
+    // Validate date of birth
+    const currentDate = new Date();
+    const selectedDate = new Date(dob);
+    if (selectedDate >= currentDate) {
+      setError("Invalid date of birth");
+      return;
+    }
+    // Form submission logic
     alert("Form submitted!");
     closeModal();
   };
 
   return (
     <div>
-        <div className='center'>
+ <div className='center'>
       <h2 >User Details Form</h2>
       </div>
       <div className='center'>
       <button className="blue-button" onClick={openModal}>Open Form</button>
       </div>
-      {isModalOpen && (
+    {isModalOpen && (
         <div className="modal" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <span className="close" onClick={closeModal}>
@@ -70,6 +93,7 @@ const ModalApp = () => {
               <button type="submit" className="submit-button">
                 Submit
               </button>
+              {error && <p className="error-message">{error}</p>}
             </form>
           </div>
         </div>
